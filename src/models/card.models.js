@@ -34,7 +34,8 @@ const cardSchema = new mongoose.Schema({
         required: true
     },
     user:{
-        type: mongoose.Schema.Types.ObjectId, ref: 'user' 
+        type: mongoose.Schema.Types.ObjectId, ref: 'user',
+        required: true
     },
     comment:[{
         type: mongoose.Schema.Types.ObjectId, ref: 'comment' 
@@ -43,6 +44,6 @@ const cardSchema = new mongoose.Schema({
 
 })
 
-const Card = mongoose.model('card', cardSchema )
+const Card = mongoose.model('cards', cardSchema )
 
 export {Card}

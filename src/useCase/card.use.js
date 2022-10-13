@@ -13,9 +13,7 @@ function deleteById(id){
 }
 
 async function create (newCard){
-    const {email, password} = newCard
-
-    return Card.create({...newCard})
+    return Card.create(newCard)
 }
 
 function update(idCard, unupdatedCard){
