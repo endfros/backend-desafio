@@ -4,6 +4,14 @@ function getAll(){
     return Card.find({})
 }
 
+function getById(id){
+    return Card.findById(id)
+}
+
+function deleteById(id){
+    return Card.findByIdAndDelete(id)
+}
+
 async function create (newCard){
     const {email, password} = newCard
 
@@ -14,4 +22,9 @@ function update(idCard, unupdatedCard){
     return Card.findByIdAndUpdate(idCard, unupdatedCard, {new : true})
 }
 
-export {getAll, update, create}
+export {
+    getAll,
+    getById,
+    deleteById,
+    update, 
+    create}
