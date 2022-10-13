@@ -8,6 +8,5 @@ function hash(plainText) {
 }
 
 export default {
-    ... bcrypt,
-    hash
+    ... bcrypt, hash
 }
