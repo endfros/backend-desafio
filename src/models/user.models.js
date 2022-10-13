@@ -5,14 +5,30 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         minLenght: 3,
-        maxLenght: 100,
-        trim: true
+        maxLenght: 35,
+    },
+    date:{
+        type: Date, 
+        default: Date.now,
+        required: true
+    },
+    nationality: {
+        type: String,
+        required: true,
+        minLenght: 3,
+        maxLenght: 30,
+    },
+    bio: {
+        type: String,
+        required: true,
+        minLenght: 3,
+        maxLenght: 350,
     },
     username: {
         type: String,
         required: true,
         minLenght: 3,
-        maxLenght: 100,
+        maxLenght: 30,
         trim: true
     },
     img: {
@@ -28,20 +44,6 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    },
-    company: {
-        name: {
-            type: String,
-            required: true,
-            minLenght: 3,
-            maxLenght: 20,
-            trim: true,
-            default: 'none'
-        },
-        img:{
-            type: String,
-            trim: true
-        }
     }
 })
 

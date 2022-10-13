@@ -4,9 +4,8 @@ const cardSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        minLenght: 3,
-        maxLenght: 30,
-        trim: true
+        minLenght: 1,
+        maxLenght: 120,
     },
     body: {
         type: String,
@@ -31,102 +30,15 @@ const cardSchema = new mongoose.Schema({
     },
     date:{
         type: Date, 
-        default: Date.now
+        default: Date.now,
+        required: true
     },
     user:{
-        name: {
-            type: String,
-            required: true,
-            minLenght: 3,
-            maxLenght: 100,
-            trim: true
-        },
-        username: {
-            type: String,
-            required: true,
-            minLenght: 3,
-            maxLenght: 100,
-            trim: true
-        },
-        img: {
-            type: String,
-            trim: true
-        },
-        company: {
-            name: {
-                type: String,
-                required: true,
-                minLenght: 3,
-                maxLenght: 20,
-                trim: true    
-            },
-            img:{
-                type: String,
-                trim: true
-            }
-        }
+        type: mongoose.Schema.Types.ObjectId, ref: 'user' 
     },
     comment:[{
-        date:{
-            type: Date, 
-            default: Date.now
-        },
-        user:{
-            name: {
-                type: String,
-                required: true,
-                minLenght: 3,
-                maxLenght: 100,
-                trim: true
-            },
-            username: {
-                type: String,
-                required: true,
-                minLenght: 3,
-                maxLenght: 100,
-                trim: true
-            },
-            img: {
-                type: String,
-                trim: true
-            }
-        },
-        likes:{
-            type: Number,
-            required: true,
-            default: 0
-        },
-        reply:[{
-            date:{
-                type: Date, 
-                default: Date.now
-            },
-            user:{
-                name: {
-                    type: String,
-                    required: true,
-                    minLenght: 3,
-                    maxLenght: 100,
-                    trim: true
-                },
-                username: {
-                    type: String,
-                    required: true,
-                    minLenght: 3,
-                    maxLenght: 100,
-                    trim: true
-                },
-                img: {
-                    type: String,
-                    trim: true
-                }
-            },
-            likes:{
-                type: Number,
-                required: true,
-                default: 0
-            }
-        }]
+        type: mongoose.Schema.Types.ObjectId, ref: 'comment' 
+
     }]
 
 })
