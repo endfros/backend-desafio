@@ -1,0 +1,21 @@
+import jwt from '../libs/jwt.js'
+
+function auth(request, response, next){
+    try{
+        const {authorization:token} = request.headers
+        const tokenDecoded = jwt.verify(token)
+        if(!tokenDecoded) throw new Error('No autorizado')
+        request.auth = tokenDecoded.id
+        next()
+    }catch(error){
+        response.status()
+        response.json({
+            success: false,
+            message: 'No autorizado',
+            error: error.message
+
+        })
+    }
+}
+
+export {auth}

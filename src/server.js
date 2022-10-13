@@ -1,7 +1,7 @@
 import express from 'express'
 import postsRouter from './routers/card.router.js'
 import writersRouter from './routers/user.router.js'
-// import authRouter from './routers/auth.router.js'
+import authRouter from './routers/auth.router.js'
 
 const server = express()
 
@@ -10,6 +10,7 @@ server.use(express.json())
 
 server.use('/post', postsRouter)
 server.use('/writer', writersRouter)
+server.use('/auth', authRouter)
 
 // apartir de aqui irian los Routers
 // server.use('/auth', authRouter)
