@@ -1,9 +1,12 @@
 import express from 'express';
 import * as userUseCase from '../useCase/user.use.js'
+import {auth} from '../middlewares/auth.js'
 
 const router = express.Router();
 
-router.get('/', async (request,response) => {
+router.use(express.json())
+
+router.get('/', async (request,response,next) => {
     try{
         const allWriters = await userUseCase.getAll()
         
@@ -41,7 +44,7 @@ router.get('/:idUser', async (request,response) => {
 })
 
 
-router.patch('/:idUser', async (request,response) => {
+router.patch('/:idUser', auth, async (request,response) => {
     try{
         const id = request.params.idUser
         const newDataUser = request.body
@@ -61,7 +64,7 @@ router.patch('/:idUser', async (request,response) => {
     }
 })
 
-router.delete('/:idUser', async (request,response) => {
+router.delete('/:idUser', auth, async (request,response) => {
     try{
         const id = request.params.idUser
         const user = await userUseCase.deleteById(id)
@@ -80,11 +83,12 @@ router.delete('/:idUser', async (request,response) => {
     }
 })
 
-router.post('/', async (request,response) => {
+router.post('/', async (request,response,next) => {
     try{
-        const newDataUser = request.body
+        const {body: newDataUser} = request
+        console.log(newDataUser)
         const newUser = await userUseCase.create(newDataUser)
-
+        
         response.json({
             success: true,
             data: {
