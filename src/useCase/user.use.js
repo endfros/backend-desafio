@@ -5,6 +5,14 @@ function getAll(){
     return User.find({})
 }
 
+function getById(id){
+    return User.findById(id)
+}
+
+function deleteById(id){
+    return User.findByIdAndDelete(id)
+}
+
 async function create (newUser){
     const {name, username, userImg, email, password, company, companyImg} = newUser
 
@@ -22,4 +30,9 @@ function update(idUser, unupdatedUser){
     return User.findByIdAndUpdate(idUser, unupdatedUser, {new : true})
 }
 
-export {getAll, update, create}
+export {
+    getAll,
+    getById,
+    deleteById,
+    update,
+    create}
