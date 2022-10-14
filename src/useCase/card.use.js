@@ -1,7 +1,9 @@
 import {Card} from '../models/card.models.js'
+import {StatusHttp} from '../libs/errorCustom.js'
 
 function getAll(){
-    return Card.find({}).populate('user')
+    const data = Card.find({}).populate('user')
+    if(!data)throw new StatusHttp('There are no posts')
 }
 
 function getById(id){

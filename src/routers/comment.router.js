@@ -1,7 +1,6 @@
 import express from 'express'
 import * as commentUseCase from '../useCase/comment.use.js'
 import * as cardUseCase from '../useCase/card.use.js'
-import {StatusHttp} from '../middlewares/errorCustom.js'
 
 const router = express.Router()
 
