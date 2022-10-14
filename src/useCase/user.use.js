@@ -1,16 +1,23 @@
 import {User} from '../models/user.models.js'
 import bcrypt from '../libs/bcrypt.js'
+import {StatusHttp} from '../libs/errorCustom.js'
 
-function getAll(){
-    return User.find({})
+async function getAll(){
+    const data = await User.find({})
+    if(!data) throw new StatusHttp('Users not found', 404)
+    return data
 }
 
-function getById(id){
-    return User.findById(id)
+async function getById(id){
+    const data = await User.findById(id)
+    if(!data) throw new StatusHttp('User not found', 404)
+    return data
 }
 
-function deleteById(id){
-    return User.findByIdAndDelete(id)
+async function deleteById(id){
+    const data = await User.findByIdAndDelete(id)
+    if(!data) throw new StatusHttp('User not found', 404)
+    return data
 }
 
 async function create (newUser){
@@ -18,7 +25,7 @@ async function create (newUser){
 
     const userFound = await User.findOne({email})
 
-    if(userFound) throw new Error('Ya existe un koder con este email')
+    if(userFound) throw new StatusHttp('Ya existe un koder con este email', 400)
 
     //Encriptar el password
     const encriptedPassword = await bcrypt.hash(password)
@@ -26,8 +33,10 @@ async function create (newUser){
     return User.create({name, username, email, img, ...userFound, password: encriptedPassword, bio, nationality})
 }
 
-function update(idUser, unupdatedUser){
-    return User.findByIdAndUpdate(idUser, unupdatedUser, {new : true})
+async function update(idUser, unupdatedUser){
+    const data = await User.findByIdAndUpdate(idUser, unupdatedUser, {new : true})
+    if(!data) throw new StatusHttp('Comment not found', 404)
+    return data
 }
 
 export {

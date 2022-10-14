@@ -7,12 +7,13 @@ const router = express.Router();
 
 router.use(express.json())
 
-router.get('/', async (request,response,next) => {
+router.get('/', async (request,response, next) => {
     try{
         const allWriters = await userUseCase.getAll()
         const token = request.headers.authentication
         const {id} = jwt.decode(token)
         console.log(id)
+
         response.json({
             success: true,
             data: {
@@ -20,18 +21,14 @@ router.get('/', async (request,response,next) => {
             }
         })
     } catch (error) {
-        response.status(400).json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.get('/:idUser', async (request,response) => {
+router.get('/:idUser', async (request,response, next) => {
     try{
         const id = request.params.idUser
         const user = await userUseCase.getById(id)
-
         response.json({
             success: true,
             data: {
@@ -39,15 +36,12 @@ router.get('/:idUser', async (request,response) => {
             }
         })
     } catch (error) {
-        response.status(400).json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
 
-router.patch('/:idUser', auth, async (request,response) => {
+router.patch('/:idUser', auth, async (request,response, next) => {
     try{
         const id = request.params.idUser
         const newDataUser = request.body
@@ -60,14 +54,11 @@ router.patch('/:idUser', auth, async (request,response) => {
             }
         })
     } catch (error) {
-        response.status(400).json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.delete('/:idUser', auth, async (request,response) => {
+router.delete('/:idUser', auth, async (request,response, next) => {
     try{
         const id = request.params.idUser
         const user = await userUseCase.deleteById(id)
@@ -79,17 +70,13 @@ router.delete('/:idUser', auth, async (request,response) => {
             }
         })
     } catch (error) {
-        response.status(400).json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
 router.post('/', async (request,response,next) => {
     try{
         const {body: newDataUser} = request
-        console.log(newDataUser)
         const newUser = await userUseCase.create(newDataUser)
         
         response.json({
@@ -99,10 +86,7 @@ router.post('/', async (request,response,next) => {
             }
         })
     } catch (error) {
-        response.status(400).json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 

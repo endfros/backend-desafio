@@ -1,13 +1,12 @@
 import express from 'express'
 import * as commentUseCase from '../useCase/comment.use.js'
 import * as cardUseCase from '../useCase/card.use.js'
-import {StatusHttp} from '../middlewares/errorCustom.js'
 import jwt from 'jsonwebtoken'
 import {auth} from '../middlewares/auth.js'
 
 const router = express.Router()
 
-router.get('/:idPost', async(request, response)=>{
+router.get('/:idPost', async(request, response, next)=>{
     try{
         const {idPost}= request.params
         const allPostComments = await commentUseCase.getById(idPost)
@@ -18,14 +17,11 @@ router.get('/:idPost', async(request, response)=>{
             },
         })
     } catch(error){
-        response.json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.get('/', async(request, response)=>{
+router.get('/', async(request, response, next)=>{
     try{
 
         const {idUser, idPost} = request.query
@@ -50,14 +46,12 @@ router.get('/', async(request, response)=>{
             },
         })
     } catch(error){
-        response.json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
 router.post('/post/:idCard',auth, async (request, response,next)=>{
+
     try{
     const idCard = request.params.idCard;
     const newCommentContent = request.body
@@ -73,14 +67,11 @@ router.post('/post/:idCard',auth, async (request, response,next)=>{
         }
     })
     } catch(error){
-        response.json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.patch('/:idComment', async (request, response)=>{
+router.patch('/:idComment', async (request, response, next)=>{
     try{
         const {idComment} = request.params
         const unupdatedComment = request.body
@@ -92,14 +83,13 @@ router.patch('/:idComment', async (request, response)=>{
             },
         })
     } catch (error){
-        response.json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.delete('/:idComment',auth, async (request, response)=>{
+
+router.delete('/:idComment',auth, async (request, response, next)=>{
+
     try{
         const {idComment}= request.params
         const commentDeleted = await commentUseCase.deleteById(idComment)
@@ -115,10 +105,7 @@ router.delete('/:idComment',auth, async (request, response)=>{
             }
         })
     } catch(error){
-        response.json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 

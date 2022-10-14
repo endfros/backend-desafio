@@ -14,11 +14,7 @@ router.post('/login', async (request, response, next)=>{
         })
     } catch(error){
         response.status(400)
-        console.log(error.message)
-        response.json({
-            success: false,
-            error: error.message
-        })
+        next(error)
     }
 })
 
