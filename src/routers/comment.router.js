@@ -57,7 +57,7 @@ router.get('/', async(request, response)=>{
     }
 })
 
-router.post('/:idCard',auth, async (request, response,next)=>{
+router.post('/post/:idCard',auth, async (request, response,next)=>{
     try{
     const idCard = request.params.idCard;
     const newCommentContent = request.body
@@ -65,7 +65,7 @@ router.post('/:idCard',auth, async (request, response,next)=>{
     const {id} = jwt.decode(token)
     const newComment = await commentUseCase.create(newCommentContent,id,idCard)
     // const commentCreated = await commentUseCase.create(newComment)
-    // const cardUpdated = await cardUseCase.createComment(newComment.card, commentCreated.id)
+    const cardUpdated = await cardUseCase.createComment(newComment.card, newComment.id)
     response.json({
         success: true,
         data: {
@@ -99,7 +99,7 @@ router.patch('/:idComment', async (request, response)=>{
     }
 })
 
-router.delete('/:idComment', async (request, response)=>{
+router.delete('/:idComment',auth, async (request, response)=>{
     try{
         const {idComment}= request.params
         const commentDeleted = await commentUseCase.deleteById(idComment)
