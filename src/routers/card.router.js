@@ -7,7 +7,7 @@ import {auth} from '../middlewares/auth.js'
 
 const router = express.Router();
 
-router.get('/', async (request,response) => {
+router.get('/', async (request, response, next) => {
     try{
         let allPosts = ''
         const{idUser} = request.query
@@ -24,14 +24,11 @@ router.get('/', async (request,response) => {
             }
         })
     } catch (error) {
-        response.status(400).json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.get('/:idPost', async (request,response) => {
+router.get('/:idPost', async (request,response, next) => {
     try{
 
         const {idPost} = request.params
@@ -44,18 +41,14 @@ router.get('/:idPost', async (request,response) => {
             }
         })
     } catch (error) {
-        response.status(400).json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
 
-router.post('/', auth,async (request,response,next) => {
+router.post('/', auth,async (request,response, next) => {
     try{
         const {body: newPostContent} = request
-        console.log(token)
         const newPost = await cardUseCase.create(newPostContent)
         
         response.json({
@@ -65,15 +58,12 @@ router.post('/', auth,async (request,response,next) => {
             }
         })
     } catch (error) {
-        response.status(400).json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
 
-router.delete('/:idPost',auth, async (request, response)=>{
+router.delete('/:idPost',auth, async (request, response, next)=>{
     try{
         const {idPost} = request.params
         const cardDeleted = await cardUseCase.deleteById(idPost)
@@ -85,14 +75,11 @@ router.delete('/:idPost',auth, async (request, response)=>{
             message: "card Deleted!"
         })
     } catch (error){
-        response.status(400).json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.patch('/:idPost',auth, async (request, response)=>{
+router.patch('/:idPost',auth, async (request, response, next)=>{
     try{
         const updateCardRequest = request.body
         const {idPost} = request.params
@@ -103,10 +90,7 @@ router.patch('/:idPost',auth, async (request, response)=>{
             message: "card Updated!"
         })
     } catch (error){
-        response.status(400).json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 

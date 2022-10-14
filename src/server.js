@@ -4,7 +4,7 @@ import postsRouter from './routers/card.router.js'
 import writersRouter from './routers/user.router.js'
 import authRouter from './routers/auth.router.js'
 import commentRouter from './routers/comment.router.js'
-import errorHandler from './middlewares/errorHandler.js'
+import {errorHandle} from './middlewares/errorHandle.js'
 
 const server = express()
 
@@ -19,7 +19,7 @@ server.use('/auth', authRouter)
 server.use('/comment', commentRouter)
 
 // middleware - handleErrors 
-server.use(errorHandler())
+server.use(errorHandle)
 
 //se exporta para usarlo en el index.js
 export {server}

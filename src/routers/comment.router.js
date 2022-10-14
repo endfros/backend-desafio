@@ -4,7 +4,7 @@ import * as cardUseCase from '../useCase/card.use.js'
 
 const router = express.Router()
 
-router.get('/:idPost', async(request, response)=>{
+router.get('/:idPost', async(request, response, next)=>{
     try{
         const {idPost}= request.params
         const allPostComments = await commentUseCase.getById(idPost)
@@ -15,14 +15,11 @@ router.get('/:idPost', async(request, response)=>{
             },
         })
     } catch(error){
-        response.json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.get('/', async(request, response)=>{
+router.get('/', async(request, response, next)=>{
     try{
         const {idUser, idPost} = request.query
         let allComments = '';
@@ -46,14 +43,11 @@ router.get('/', async(request, response)=>{
             },
         })
     } catch(error){
-        response.json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.post('/', async (request, response)=>{
+router.post('/', async (request, response, next)=>{
     try{
     const newComment = request.body
     const commentCreated = await commentUseCase.create(newComment)
@@ -68,14 +62,11 @@ router.post('/', async (request, response)=>{
         }
     })
     } catch(error){
-        response.json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.patch('/:idComment', async (request, response)=>{
+router.patch('/:idComment', async (request, response, next)=>{
     try{
         const {idComment} = request.params
         const unupdatedComment = request.body
@@ -87,14 +78,11 @@ router.patch('/:idComment', async (request, response)=>{
             },
         })
     } catch (error){
-        response.json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 
-router.delete('/:idComment', async (request, response)=>{
+router.delete('/:idComment', async (request, response, next)=>{
     try{
         const {idComment}= request.params
         const commentDeleted = await commentUseCase.deleteById(idComment)
@@ -110,10 +98,7 @@ router.delete('/:idComment', async (request, response)=>{
             }
         })
     } catch(error){
-        response.json({
-            success: false,
-            message: error.message
-        })
+        next(error)
     }
 })
 

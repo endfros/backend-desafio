@@ -1,40 +1,50 @@
 import {Comment} from '../models/comment.models.js'
+import {StatusHttp} from '../libs/errorCustom.js'
 
-function getAll(){
-    return Comment.find({})
+async function getById(id){
+    const data = await Comment.findById(id).populate('user').populate('card')
+    if(!data) throw new StatusHttp('Comment not found', 404)
+    return data
 }
 
-function getById(id){
-    return Comment.findById(id)
+async function getByPost(id){
+    const data = await Comment.find({card: id}).populate('user').populate('card')
+    if(data==false) throw new StatusHttp('No comments found', 404)
+    return data
 }
 
-function getByPost(id){
-    return Comment.find({card: id})
+async function getByUser(id){
+    const data = await Comment.find({user: id}).populate('user').populate('card')
+    if(!data) throw new StatusHttp('No comments found', 404)
+    return data
 }
 
-function getByUser(id){
-    return Comment.find({user: id})
+async function create(newComment){
+    const data = await Comment.create(newComment)
+    if(!data) throw new StatusHttp('An error ocurred', 400)
+    return data
 }
 
-function create(newComment){
-    return Comment.create(newComment)
+async function update(id, newComment){
+    const data = await  Comment.findByIdAndUpdate(id, newComment, {new : true})
+    if(!data) throw new StatusHttp('Comment not found', 404)
+    return data
 }
 
-function update(id, newComment){
-    return Comment.findByIdAndUpdate(id, newComment, {new : true})
+async function deleteById(id){
+    const data = await Comment.findByIdAndDelete(id)
+    if(!data) throw new StatusHttp('Comment not found', 404)
+    return data
 }
 
-function deleteById(id){
-    return Comment.findByIdAndDelete(id)
-}
-
-function deletePostComments(idCard){
-    return Comment.deleteMany({card:idCard})
+async function deletePostComments(idCard){
+    const data = await Comment.deleteMany({card:idCard})
+    if(!data) throw new StatusHttp('Comment not found', 404)
+    return data
 }
 
 export {
     create, 
-    getAll,
     getById,
     getByPost,
     getByUser,
