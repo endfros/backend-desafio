@@ -1,4 +1,5 @@
 import {Card} from '../models/card.models.js'
+import jwt from 'jsonwebtoken'
 
 function getAll(){
     return Card.find({}).populate('user')
@@ -6,6 +7,10 @@ function getAll(){
 
 function getById(id){
     return Card.findById(id).populate('user')
+}
+
+function getPostByUserId(id){
+    return Card.find({user: id})
 }
 
 function getByUser(id){
@@ -16,8 +21,9 @@ function deleteById(id){
     return Card.findByIdAndDelete(id)
 }
 
-function create (newCard){
-    return Card.create(newCard)
+async function create (newCard,user){
+    const {title, body, hashtags, img, reactions, readingTime, date} = newCard
+    return Card.create({title, body, hashtags, img, reactions, readingTime, date, user})
 }
 
 function createComment (idCard, idComment){
@@ -37,6 +43,7 @@ export {
     getAll,
     getById,
     getByUser,
+    getPostByUserId,
     deleteById,
     update, 
     create, 

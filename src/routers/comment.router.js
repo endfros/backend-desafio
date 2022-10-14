@@ -2,6 +2,8 @@ import express from 'express'
 import * as commentUseCase from '../useCase/comment.use.js'
 import * as cardUseCase from '../useCase/card.use.js'
 import {StatusHttp} from '../middlewares/errorCustom.js'
+import jwt from 'jsonwebtoken'
+import {auth} from '../middlewares/auth.js'
 
 const router = express.Router()
 
@@ -25,6 +27,7 @@ router.get('/:idPost', async(request, response)=>{
 
 router.get('/', async(request, response)=>{
     try{
+
         const {idUser, idPost} = request.query
         let allComments = '';
         if(idUser){
@@ -54,18 +57,19 @@ router.get('/', async(request, response)=>{
     }
 })
 
-router.post('/', async (request, response)=>{
+router.post('/:idCard',auth, async (request, response,next)=>{
     try{
-    const newComment = request.body
-    const commentCreated = await commentUseCase.create(newComment)
-    const cardUpdated = await cardUseCase.createComment(newComment.card, commentCreated.id)
+    const idCard = request.params.idCard;
+    const newCommentContent = request.body
+    const token = request.headers.authorization
+    const {id} = jwt.decode(token)
+    const newComment = await commentUseCase.create(newCommentContent,id,idCard)
+    // const commentCreated = await commentUseCase.create(newComment)
+    // const cardUpdated = await cardUseCase.createComment(newComment.card, commentCreated.id)
     response.json({
         success: true,
         data: {
-            comment: commentCreated
-        },
-        cardUpdated : {
-            card: cardUpdated
+            comment: newComment
         }
     })
     } catch(error){
