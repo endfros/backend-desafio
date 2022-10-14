@@ -1,5 +1,7 @@
 import {Card} from '../models/card.models.js'
 import {StatusHttp} from '../libs/errorCustom.js'
+import jwt from 'jsonwebtoken'
+
 
 async function getAll(){
     const data = await Card.find({}).populate('user').populate('comment')
@@ -13,8 +15,14 @@ async function getById(id){
     return data
 }
 
-async function getByUser(id){
+async function getPostByUserId(id){
     const data = await Card.find({user: id}).populate('user').populate('comment')
+    if(!data)throw new StatusHttp('User has no post.', 400)
+    return data
+}
+
+async function getByUser(id){
+    const data = await Card.find({user: id})
     if(!data)throw new StatusHttp('User has no post.', 400)
     return data
 }
@@ -25,8 +33,9 @@ async function deleteById(id){
     return data
 }
 
-async function create (newCard){
-    const data = await Card.create(newCard)
+async function create (newCard, user){
+    const {title, body, hashtags, img, reactions, readingTime, date} = newCard
+    const data = await Card.create({title, body, hashtags, img, reactions, readingTime, date, user})
     if(!data)throw new StatusHttp('An error ocurred', 400)
     return data
 }
@@ -53,6 +62,7 @@ export {
     getAll,
     getById,
     getByUser,
+    getPostByUserId,
     deleteById,
     update, 
     create, 

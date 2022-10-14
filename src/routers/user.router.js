@@ -1,6 +1,7 @@
 import express from 'express';
 import * as userUseCase from '../useCase/user.use.js'
 import {auth} from '../middlewares/auth.js'
+import jwt from 'jsonwebtoken'
 
 const router = express.Router();
 
@@ -9,6 +10,10 @@ router.use(express.json())
 router.get('/', async (request,response, next) => {
     try{
         const allWriters = await userUseCase.getAll()
+        const token = request.headers.authentication
+        const {id} = jwt.decode(token)
+        console.log(id)
+
         response.json({
             success: true,
             data: {

@@ -1,6 +1,8 @@
 import express from 'express'
 import * as commentUseCase from '../useCase/comment.use.js'
 import * as cardUseCase from '../useCase/card.use.js'
+import jwt from 'jsonwebtoken'
+import {auth} from '../middlewares/auth.js'
 
 const router = express.Router()
 
@@ -21,6 +23,7 @@ router.get('/:idPost', async(request, response, next)=>{
 
 router.get('/', async(request, response, next)=>{
     try{
+
         const {idUser, idPost} = request.query
         let allComments = '';
         if(idUser){
@@ -47,18 +50,20 @@ router.get('/', async(request, response, next)=>{
     }
 })
 
-router.post('/', async (request, response, next)=>{
+router.post('/post/:idCard',auth, async (request, response,next)=>{
+
     try{
-    const newComment = request.body
-    const commentCreated = await commentUseCase.create(newComment)
-    const cardUpdated = await cardUseCase.createComment(newComment.card, commentCreated.id)
+    const idCard = request.params.idCard;
+    const newCommentContent = request.body
+    const token = request.headers.authorization
+    const {id} = jwt.decode(token)
+    const newComment = await commentUseCase.create(newCommentContent,id,idCard)
+    // const commentCreated = await commentUseCase.create(newComment)
+    const cardUpdated = await cardUseCase.createComment(newComment.card, newComment.id)
     response.json({
         success: true,
         data: {
-            comment: commentCreated
-        },
-        cardUpdated : {
-            card: cardUpdated
+            comment: newComment
         }
     })
     } catch(error){
@@ -82,7 +87,9 @@ router.patch('/:idComment', async (request, response, next)=>{
     }
 })
 
-router.delete('/:idComment', async (request, response, next)=>{
+
+router.delete('/:idComment',auth, async (request, response, next)=>{
+
     try{
         const {idComment}= request.params
         const commentDeleted = await commentUseCase.deleteById(idComment)
