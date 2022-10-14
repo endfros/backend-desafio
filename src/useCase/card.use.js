@@ -41,4 +41,5 @@ export {
     update, 
     create, 
     createComment,
-    deleteComment}
+    deleteComment
+    }

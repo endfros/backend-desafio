@@ -1,18 +1,20 @@
 import express from 'express'
-import * as authUseCases from '../useCase/auth.use.js'
+import { Error } from 'mongoose'
+import * as authUseCase from '../useCase/auth.use.js'
 
 const router = express.Router()
 
 router.post('/login', async (request, response, next)=>{
     try{
         const {email, password} = request.body
-        const token = await authUseCases.login(email, password)
+        const token = await authUseCase.myLogIn(email, password)
         response.json({
             success:true,
             token
         })
     } catch(error){
         response.status(400)
+        console.log(error.message)
         response.json({
             success: false,
             error: error.message

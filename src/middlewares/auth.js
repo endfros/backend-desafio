@@ -8,12 +8,11 @@ function auth(request, response, next){
         request.auth = tokenDecoded.id
         next()
     }catch(error){
-        response.status()
+        response.status(401)
         response.json({
             success: false,
             message: 'No autorizado',
             error: error.message
-
         })
     }
 }
