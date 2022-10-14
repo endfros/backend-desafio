@@ -2,8 +2,7 @@ import express from 'express';
 import * as cardUseCase from '../useCase/card.use.js'
 import * as commentUseCase from '../useCase/comment.use.js'
 import {auth} from '../middlewares/auth.js'
-
-
+import jwt from 'jsonwebtoken'
 
 const router = express.Router();
 
@@ -31,11 +30,11 @@ router.get('/', async (request,response) => {
     }
 })
 
-router.get('/:idPost', async (request,response) => {
+router.get('/writer/:idUser', async (request,response) => {
     try{
-
-        const {idPost} = request.params
-        const card = await cardUseCase.getById(idPost)
+        const {idUser} = request.params
+        console.log(idUser)
+        const card = await cardUseCase.getPostByUserId(idUser)
 
         response.json({
             success: true,
@@ -55,8 +54,10 @@ router.get('/:idPost', async (request,response) => {
 router.post('/', auth,async (request,response,next) => {
     try{
         const {body: newPostContent} = request
-        console.log(token)
-        const newPost = await cardUseCase.create(newPostContent)
+        const token = request.headers.authorization
+        const {id} = jwt.decode(token)
+        console.log(id)
+        const newPost = await cardUseCase.create(newPostContent,id)
         
         response.json({
             success: true,

@@ -16,8 +16,9 @@ function getByUser(id){
     return Comment.find({user: id})
 }
 
-function create(newComment){
-    return Comment.create(newComment)
+async function create(newComment,user,card){
+    const {text,reactions,date} = newComment
+    return Comment.create({text,reactions,date,user,card})
 }
 
 function update(id, newComment){
