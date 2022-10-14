@@ -13,7 +13,10 @@ function deleteById(id){
 }
 
 async function create (newCard){
-    return Card.create(newCard)
+
+    const {title, body, hashtags, img, reactions,readingTime,date,user,comment} = newCard
+    return Card.create({title,body,hashtags,img,reactions,readingTime,date,user,comment})
+
 }
 
 function update(idCard, unupdatedCard){
@@ -25,4 +28,5 @@ export {
     getById,
     deleteById,
     update, 
-    create}
+    create
+}

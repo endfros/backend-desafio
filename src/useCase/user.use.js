@@ -14,7 +14,7 @@ function deleteById(id){
 }
 
 async function create (newUser){
-    const {name, username, userImg, email, password, company, companyImg} = newUser
+    const {name, username, img, email, password, bio, nationality} = newUser
 
     const userFound = await User.findOne({email})
 
@@ -23,7 +23,7 @@ async function create (newUser){
     //Encriptar el password
     const encriptedPassword = await bcrypt.hash(password)
 
-    return User.create({name, username, userImg, ...userFound, password: encriptedPassword, company, companyImg})
+    return User.create({name, username, email, img, ...userFound, password: encriptedPassword, bio, nationality})
 }
 
 function update(idUser, unupdatedUser){

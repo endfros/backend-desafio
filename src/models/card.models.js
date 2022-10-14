@@ -31,7 +31,6 @@ const cardSchema = new mongoose.Schema({
     date:{
         type: Date, 
         default: Date.now,
-        required: true
     },
     user:{
         type: mongoose.Schema.Types.ObjectId, ref: 'user',
@@ -39,7 +38,6 @@ const cardSchema = new mongoose.Schema({
     },
     comment:[{
         type: mongoose.Schema.Types.ObjectId, ref: 'comment' 
-
     }]
 
 })

@@ -1,5 +1,7 @@
 import express from 'express';
 import * as cardUseCase from '../useCase/card.use.js'
+import {auth} from '../middlewares/auth.js'
+import {Card} from '../models/card.models.js'
 
 const router = express.Router();
 
@@ -23,6 +25,7 @@ router.get('/', async (request,response) => {
 
 router.get('/:idPost', async (request,response) => {
     try{
+
         const {idPost} = request.params
         const card = await cardUseCase.getById(idPost)
 
@@ -40,15 +43,20 @@ router.get('/:idPost', async (request,response) => {
     }
 })
 
-router.post('/', async (request, response)=>{
+
+router.post('/', auth,async (request,response,next) => {
     try{
-        const newCard = request.body
-        const cardCreated = await cardUseCase.create(newCard)
-        response.status(200).json({
+        const {body: newPostContent} = request
+        console.log(token)
+        const newPost = await cardUseCase.create(newPostContent)
+        
+        response.json({
             success: true,
-            card: cardCreated
+            data: {
+                post: newPost
+            }
         })
-    } catch (error){
+    } catch (error) {
         response.status(400).json({
             success: false,
             message: error.message
@@ -56,7 +64,8 @@ router.post('/', async (request, response)=>{
     }
 })
 
-router.delete('/:idPost', async (request, response)=>{
+
+router.delete('/:idPost',auth, async (request, response)=>{
     try{
         const {idPost} = request.params
         const cardDeleted = await cardUseCase.deleteById(idPost)
@@ -73,7 +82,7 @@ router.delete('/:idPost', async (request, response)=>{
     }
 })
 
-router.patch('/:idPost', async (request, response)=>{
+router.patch('/:idPost',auth, async (request, response)=>{
     try{
         const updateCardRequest = request.body
         const {idPost} = request.params
