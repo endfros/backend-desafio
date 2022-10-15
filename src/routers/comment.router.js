@@ -36,7 +36,6 @@ router.get('/', async(request, response, next)=>{
         }
 
         if (!allComments){
-            console.log('no comments found')
             throw new StatusHttp('no comments found!', 404)
         }
         response.json({

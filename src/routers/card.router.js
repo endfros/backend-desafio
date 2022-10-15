@@ -50,7 +50,6 @@ router.post('/', auth,async (request,response, next) => {
         const {body: newPostContent} = request
         const token = request.headers.authorization
         const {id} = jwt.decode(token)
-        console.log(id)
         const newPost = await cardUseCase.create(newPostContent,id)
 
         
