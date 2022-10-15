@@ -15,14 +15,8 @@ async function getById(id){
     return data
 }
 
-async function getPostByUserId(id){
-    const data = await Card.find({user: id}).populate('user').populate('comment')
-    if(!data)throw new StatusHttp('User has no post.', 400)
-    return data
-}
-
 async function getByUser(id){
-    const data = await Card.find({user: id})
+    const data = await Card.find({user: id}).populate('user').populate('comment')
     if(!data)throw new StatusHttp('User has no post.', 400)
     return data
 }
@@ -62,7 +56,6 @@ export {
     getAll,
     getById,
     getByUser,
-    getPostByUserId,
     deleteById,
     update, 
     create, 

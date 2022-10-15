@@ -35,7 +35,7 @@ async function create (newUser){
 
 async function update(idUser, unupdatedUser){
     const data = await User.findByIdAndUpdate(idUser, unupdatedUser, {new : true})
-    if(!data) throw new StatusHttp('Comment not found', 404)
+    if(!data) throw new StatusHttp('User not found', 404)
     return data
 }
 

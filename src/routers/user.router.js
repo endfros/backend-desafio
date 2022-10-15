@@ -10,9 +10,6 @@ router.use(express.json())
 router.get('/', async (request,response, next) => {
     try{
         const allWriters = await userUseCase.getAll()
-        const token = request.headers.authentication
-        const {id} = jwt.decode(token)
-        console.log(id)
 
         response.json({
             success: true,

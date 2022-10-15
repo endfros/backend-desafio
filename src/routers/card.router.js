@@ -28,11 +28,10 @@ router.get('/', async (request, response, next) => {
 })
 
 
-router.get('/writer/:idUser', async (request,response, next) => {
+router.get('/:idPost', async (request,response, next) => {
     try{
-        const {idUser} = request.params
-        console.log(idUser)
-        const card = await cardUseCase.getPostByUserId(idUser)
+        const {idPost} = request.params
+        const card = await cardUseCase.getById(idPost)
 
         response.json({
             success: true,

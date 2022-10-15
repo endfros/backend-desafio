@@ -19,18 +19,18 @@ async function getByUser(id){
     return data
 }
 
-async function create(newComment,user,card){
-    const {text,reactions,date} = newComment
-    const data = await Comment.create({text,reactions,date,user,card})
+async function create(newComment,user){
+    const {text,card} = newComment
+    const data = await Comment.create({text,card,user})
     if(!data) throw new StatusHttp('An error ocurred', 400)
     return data
 }
-
 
 async function update(id, newComment){
     const data = await  Comment.findByIdAndUpdate(id, newComment, {new : true})
     if(!data) throw new StatusHttp('Comment not found', 404)
     return data
+}
 
 async function deleteById(id){
     const data = await Comment.findByIdAndDelete(id)
