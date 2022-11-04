@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-router.get("/", async (request, response, next) => {
+router.get("/all", async (request, response, next) => {
   try {
     let allPosts = "";
     const { idUser } = request.query;
@@ -15,6 +15,21 @@ router.get("/", async (request, response, next) => {
     } else {
       allPosts = await cardUseCase.getAll();
     }
+    response.json({
+      success: true,
+      data: {
+        posts: allPosts,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/me", auth, async (request, response, next) => {
+  try {
+    const { auth } = request;
+    const allPosts = await cardUseCase.getByUser(auth);
     response.json({
       success: true,
       data: {

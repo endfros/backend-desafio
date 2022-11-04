@@ -22,10 +22,25 @@ router.get("/", async (request, response, next) => {
   }
 });
 
-router.get("/:idUser", async (request, response, next) => {
+router.get("/user:idUser", async (request, response, next) => {
   try {
     const id = request.params.idUser;
     const user = await userUseCase.getById(id);
+    response.json({
+      success: true,
+      data: {
+        users: user,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/me", auth, async (request, response, next) => {
+  try {
+    const { auth } = request;
+    const user = await userUseCase.getById(auth);
     response.json({
       success: true,
       data: {

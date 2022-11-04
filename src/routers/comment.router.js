@@ -21,21 +21,10 @@ router.get("/:idPost", async (request, response, next) => {
   }
 });
 
-router.get("/", async (request, response, next) => {
+router.get("/me", auth, async (request, response, next) => {
   try {
-    const { idUser, idPost } = request.query;
-    let allComments = "";
-    if (idUser) {
-      allComments = await commentUseCase.getByUser(idUser);
-    } else if (idPost) {
-      allComments = await commentUseCase.getByPost(idPost);
-    } else {
-      throw new StatusHttp("neither an user nor a post are declare!", 404);
-    }
-
-    if (!allComments) {
-      throw new StatusHttp("no comments found!", 404);
-    }
+    const { auth } = request;
+    allComments = await commentUseCase.getByUser(auth);
     response.json({
       success: true,
       data: {
