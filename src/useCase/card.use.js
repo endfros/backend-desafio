@@ -21,11 +21,12 @@ async function getByUser(id) {
   return data;
 }
 
-async function deleteById(id) {
-  const data = await Card.findByIdAndDelete(id)
+async function deleteById(id, idUser) {
+  console.log(id, idUser);
+  const data = await Card.findOneAndDelete({ _id: id, user: idUser })
     .populate("user")
     .populate("comment");
-  if (!data) throw new StatusHttp("Post not found", 404);
+  if (!data) throw new StatusHttp("Error", 404);
   return data;
 }
 
@@ -59,13 +60,17 @@ async function deleteComment(idCard, idComment) {
   return data;
 }
 
-async function update(idCard, unupdatedCard) {
-  const data = await Card.findByIdAndUpdate(idCard, unupdatedCard, {
-    new: true,
-  })
+async function update(idCard, unupdatedCard, idUser) {
+  const data = await Card.findOneAndUpdate(
+    { _id: idCard, user: idUser },
+    unupdatedCard,
+    {
+      new: true,
+    }
+  )
     .populate("user")
     .populate("comment");
-  if (!data) throw new StatusHttp("Post not found", 404);
+  if (!data) throw new StatusHttp("Error", 404);
   return data;
 }
 
